@@ -1,0 +1,50 @@
+
+  <table id="example2" class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>No.</th>
+      <th>Tipe Pembayaran</th>
+      <th>Bank</th>
+      <th>Status</th>
+      <th>Aksi</th>
+    </tr>
+    </thead>
+    <tbody>
+      <% for(let i = 0; i < payment.length; i++) { %>
+        <tr>
+          <td><%= i + 1 %></td>
+          <td><%= payment[i]?.type %></td>
+          <td>
+            <% payment[i]?.bank?.forEach(b => { %>
+              <span class="badge badge-warning mb-2">
+                <%= b.name %> | <%= b.nameBank %> | <%= b.noRekening %>  
+              </span>
+            <% }) %>
+          </td>
+          <td>
+            <% if (payment[i]?.status === "Y") { %>
+              <span class="badge badge-success">
+                Aktif
+              </span>
+            <% } else { %>
+              <span class="badge badge-danger">
+                Non Aktif
+              </span>
+            <% } %>
+          </td>
+          <td>
+            <form action="/payment/delete/<%=payment[i]?._id%>" method="post">
+              <a href="/payment/edit/<%=payment[i]?._id%>" class="btn btn-warning">
+                <i class="fas fa-pencil-alt"></i>
+                Ubah
+              </a>
+              <button class="btn btn-danger" type="submit">
+                <i class="fas fa-trash"></i>
+                Hapus
+              </button>
+            </form>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>

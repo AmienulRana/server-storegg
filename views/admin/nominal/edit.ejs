@@ -1,0 +1,71 @@
+<%- include('../../partials/header.ejs'); %>
+<%- include('../../partials/sidebar.ejs'); %>
+<%- include('../../partials/navbar.ejs'); %>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Nominal</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item"><a href="/nominal">Nominal</a></li>
+              <li class="breadcrumb-item active">Tambah</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Form Tambah Nominal</h3>
+                </div>
+                <form action="/nominal/edit" method="post">
+                      <input type="hidden" value="<%= nominal._id %>" name="id" required>
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label>Nama item</label>
+                      <select name="itemName" class="form-control select2" style="width: 100%;">
+                        <option>Pilih Items</option>
+                        <option value="diamonds" <%= nominal.itemName === 'diamonds' ? "selected" : ''%>>Diamonds</option>
+                        <option value="coins" <%= nominal.itemName === 'coins' ? "selected" : ''%>>Coins</option>
+                        <option value="jewel" <%= nominal.itemName === 'jewel' ? "selected" : ''%>>Jewel</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="category">Masukan jumlah item</label>
+                      <input type="number" value="<%= nominal.itemQuantity %>" name="itemQuantity" class="form-control" placeholder="Masukan jumlah item" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="category">Masukan harga</label>
+                      <input type="number" value="<%= nominal.price %>" name="price" class="form-control" placeholder="Masukan harga item" required>
+                    </div>
+                  </div>
+                  <!-- /.card-b ody -->
+  
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                  </div>
+                </form>
+              </div>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+<%- include('../../partials/footer.ejs') %>
+<%- include('../../partials/js.ejs') %>
