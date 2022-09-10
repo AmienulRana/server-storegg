@@ -18,7 +18,7 @@ router.get("/tambah", viewCreate);
 router.get("/update-status/:id?", actionUpdateStatus);
 router.post("/tambah", upload.single("thumbnail"), actionCreate);
 router.get("/edit/:id", viewEdit);
-router.post("/edit", actionEdit);
+router.post("/edit", upload.single("thumbnail"), actionEdit);
 router.post("/delete/:id", actionDelete);
 
 module.exports = router;

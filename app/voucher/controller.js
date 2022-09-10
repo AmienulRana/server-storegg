@@ -66,9 +66,13 @@ module.exports = {
   viewEdit: async (req, res) => {
     try {
       const { id } = req.params;
-      const voucher = await Voucher.findOne({ _id: id });
+      const voucher = await (
+        await Voucher.findOne({ _id: id }).populate("nominals")
+      ).populate("category");
+      const category = await Category.find();
+      const nominal = await Nominal.find();
       console.log(voucher);
-      res.render("admin/voucher/edit", { voucher });
+      res.render("admin/voucher/edit", { voucher, category, nominal });
     } catch (err) {
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
@@ -78,33 +82,54 @@ module.exports = {
   actionEdit: async (req, res) => {
     try {
       const { id } = req.body;
-      const voucher = await Voucher.updateOne(
-        { _id: id },
-        {
-          $set: {
-            ...req.body,
-          },
-        }
-      );
+      if (req.file) {
+        const { filename } = req.file;
+        const voucher = await Voucher.updateOne(
+          { _id: id },
+          {
+            $set: {
+              thumbnail: filename,
+              ...req.body,
+            },
+          }
+        );
+        req.flash("alertMessage", "Berhasil Mengubah Voucher");
+        req.flash("alertStatus", "success");
+        res.redirect("/voucher");
+      }
+
       req.flash("alertMessage", "Berhasil Mengubah voucher");
       req.flash("alertStatus", "success");
       res.redirect("/voucher");
     } catch (err) {
+      console.log(err);
       req.flash("alertMessage", `${err.message}`);
       req.flash("alertStatus", "danger");
       res.redirect("/voucher");
     }
   },
-  actionUpdateStatus: (req, res) => {
+  actionUpdateStatus: async (req, res) => {
     try {
       const { id } = req.params;
-      const { status } = req.query;
-      console.log(status);
-      // res.redirect("/voucher");
-      res.json({ message: "tes" });
-      // const voucher = await Voucher.updateOne({ _id: id}, { $set: {
+      let voucher = await Voucher.findOne({ _id: id });
 
-      // }})
-    } catch (err) {}
+      let status = voucher.status === "Y" ? "N" : "Y";
+
+      voucher = await Voucher.findOneAndUpdate(
+        {
+          _id: id,
+        },
+        { status }
+      );
+
+      req.flash("alertMessage", "Berhasil ubah status");
+      req.flash("alertStatus", "success");
+
+      res.redirect("/voucher");
+    } catch (err) {
+      req.flash("alertMessage", "Gagal ubah status");
+      req.flash("alertStatus", "failed");
+      res.redirect("/voucher");
+    }
   },
 };
