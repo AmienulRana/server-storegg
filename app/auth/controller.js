@@ -5,23 +5,19 @@ module.exports = {
   signup: async (req, res, next) => {
     try {
       const { email } = req.body;
-      if (req.file) {
-      } else {
-        const checkDuplicatePlayer = await Player.findOne({
-          email,
-        });
-        if (checkDuplicatePlayer) {
-          return res
-            .status(422)
-            .json({ message: "Your email has ben declared" });
-        }
 
-        req.body.password = bcrypt.hashSync(req.body.password, 10);
-        const player = new Player({ ...req.body });
-        await player.save();
-        delete player._doc.password;
-        res.status(200).json({ data: player, message: "Signup success" });
+      const checkDuplicatePlayer = await Player.findOne({
+        email,
+      });
+      if (checkDuplicatePlayer) {
+        return res.status(422).json({ message: "Your email has ben declared" });
       }
+
+      req.body.password = bcrypt.hashSync(req.body.password, 10);
+      const player = new Player({ ...req.body });
+      await player.save();
+      delete player._doc.password;
+      res.status(200).json({ data: player, message: "Signup success" });
     } catch (err) {
       if (err && err.name === "ValidationError") {
         return res.status(422).json({
@@ -44,6 +40,7 @@ module.exports = {
           avatar: player.avatar,
         };
         const cek_password = bcrypt.compareSync(password, player.password);
+        console.log(cek_password);
         if (!cek_password)
           return res
             .status(442)

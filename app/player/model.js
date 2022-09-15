@@ -24,8 +24,6 @@ const PlayerSchema = mongoose.Schema(
       type: String,
       require: [true, "Password Harus Diisi"],
     },
-    avatar: { type: String, default: "-" },
-    favorite: { type: mongoose.Schema.Types.ObjectId, ref: "category" },
   },
   { timestamps: true }
 );
