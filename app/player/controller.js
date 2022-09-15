@@ -25,7 +25,6 @@ module.exports = {
         .populate("nominals")
         .populate("user", "_id name phoneNumber")
         .populate("category");
-      console.log(payment);
       if (!voucher) {
         return res.status(404).json({ message: "Voucher game not Found" });
       }
@@ -46,7 +45,15 @@ module.exports = {
   },
   checkout: async (req, res) => {
     try {
-      const { accountUser, name, nominal, voucher, payment, bank } = req.body;
+      const {
+        accountUser,
+        name,
+        nominal,
+        voucher,
+        payment,
+        bank,
+        usernameGame,
+      } = req.body;
 
       const res_voucher = await Voucher.findOne({ _id: voucher })
         .select("name category _id thumbnail user")
@@ -91,11 +98,11 @@ module.exports = {
           bankName: res_bank.bankName,
           noRekening: res_bank.noRekening,
         },
-
-        name: name,
-        accountUser: accountUser,
-        tax: tax,
-        value: value,
+        usernameGame,
+        name,
+        accountUser,
+        tax,
+        value,
         player: req.player._id,
         historyUser: {
           name: res_voucher.user?.name,
@@ -166,7 +173,7 @@ module.exports = {
 
       if (!history)
         return res.status(404).json({ message: "history tidak ditemukan." });
-
+      console.log(history);
       res.status(200).json({ data: history });
     } catch (err) {
       res.status(500).json({ message: err.message || `Internal server error` });
@@ -183,7 +190,6 @@ module.exports = {
           },
         },
       ]);
-
       const category = await Category.find({});
 
       category.forEach((element) => {
@@ -198,7 +204,7 @@ module.exports = {
         .populate("category")
         .sort({ updatedAt: -1 });
 
-      res.status(200).json({ data: history, count: count });
+      res.status(200).json({ data: [...history, ...count] });
     } catch (err) {
       res.status(500).json({ message: err.message || `Internal server error` });
     }
@@ -215,6 +221,30 @@ module.exports = {
       };
 
       res.status(200).json({ data: player });
+    } catch (err) {
+      res.status(500).json({ message: err.message || `Internal server error` });
+    }
+  },
+  editProfile: async (req, res) => {
+    try {
+      const { _id } = req.player;
+
+      const updateUser = await Player.updateOne(
+        { _id },
+        {
+          $set: {
+            ...req.body,
+          },
+        }
+      );
+      if (updateUser.modifiedCount > 0) {
+        return res
+          .status(200)
+          .json({ data: { message: "Berhasil mengubah profile" } });
+      }
+      res
+        .status(200)
+        .json({ data: { message: "Tidak ada data yang berubah" } });
     } catch (err) {
       res.status(500).json({ message: err.message || `Internal server error` });
     }
