@@ -10,6 +10,7 @@ const {
   historyDetail,
   dashboard,
   profile,
+  editProfile,
 } = require("./controller");
 
 router.get("/", landingPage);
@@ -17,8 +18,9 @@ router.get("/detail/:id", detailPage);
 router.get("/category", category);
 router.post("/checkout", authenticationToken, checkout);
 router.get("/history", authenticationToken, history);
-router.get("/history/:id/detail", authenticationToken, historyDetail);
+router.get("/history/:id/detail", historyDetail);
 router.get("/dashboard", authenticationToken, dashboard);
 router.get("/profile", authenticationToken, profile);
+router.post("/edit", authenticationToken, editProfile);
 
 module.exports = router;
