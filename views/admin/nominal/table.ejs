@@ -13,8 +13,8 @@
       <% for(let i = 0; i < nominal.length; i++) { %>
         <tr>
           <td><%= i + 1 %></td>
-          <td><%= nominal[i]?.itemName %></td>
-          <td><%= nominal[i]?.itemQuantity %></td>
+          <td><%= nominal[i]?.coinName %></td>
+          <td><%= nominal[i]?.coinQuantity %></td>
           <td><%= nominal[i]?.price %></td>
           <td>
             <form action="/nominal/delete/<%=nominal[i]?._id%>" method="post">
