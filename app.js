@@ -15,6 +15,7 @@ const userRouter = require("./app/users/router");
 const transactionsRouter = require("./app/transactions/router");
 const PlayerRouter = require("./app/player/router");
 const AuthRouter = require("./app/auth/router");
+const VocaRouter = require("./app/voca/router");
 const app = express();
 const cors = require("cors");
 
@@ -55,6 +56,7 @@ app.use("/transactions", transactionsRouter);
 
 // api
 app.use(`${URL}/players`, PlayerRouter);
+app.use(`${URL}/thrid-party`, VocaRouter);
 
 // auth
 app.use(`${URL}/auth`, AuthRouter);
